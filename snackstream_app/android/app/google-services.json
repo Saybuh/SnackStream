@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "526525803001",
+    "project_id": "snackstream-d9c9f",
+    "storage_bucket": "snackstream-d9c9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526525803001:android:461febdc2a4447f0db3528",
+        "android_client_info": {
+          "package_name": "com.example.snackstream_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1RMpKtGfRVXYwsVnm97fDrnqpfXeezVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
