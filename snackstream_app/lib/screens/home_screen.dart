@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/database_service.dart';
 import '../models/restaurant.dart';
 import 'restaurant_screen.dart';
+import '../widgets/app_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -13,6 +14,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Restaurants'),
       ),
+      drawer: AppDrawer(),
       body: StreamBuilder<List<Map<String, dynamic>>>(
         stream: databaseService.getRestaurants(),
         builder: (context, snapshot) {

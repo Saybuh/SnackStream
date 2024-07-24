@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import '../models/cart.dart';
 import '../services/database_service.dart';
+import '../services/auth_service.dart';
 import 'order_confirmation_screen.dart';
+import '../widgets/app_drawer.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -33,11 +35,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
     final databaseService = Provider.of<DatabaseService>(context);
+    final authService = Provider.of<AuthService>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Checkout'),
       ),
+      drawer: AppDrawer(),
       body: Column(
         children: <Widget>[
           CreditCardWidget(
@@ -70,8 +74,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       if (formKey.currentState!.validate()) {
                         // Here you would handle card processing logic
                         await databaseService.addOrder({
-                          'userId':
-                              'exampleUserId', // Replace with actual user ID
+                          'userId': authService.user!.uid,
                           'items':
                               cart.items.map((item) => item.toMap()).toList(),
                           'status': 'pending',

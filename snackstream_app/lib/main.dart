@@ -12,6 +12,7 @@ import 'screens/home_screen.dart';
 import 'screens/cart_screen.dart';
 import 'screens/checkout_screen.dart';
 import 'screens/order_confirmation_screen.dart';
+import 'screens/reviews_screen.dart';
 import 'models/cart.dart';
 
 void main() async {
@@ -25,30 +26,39 @@ class SnackstreamApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<AuthService>(create: (_) => AuthService()),
-        Provider<DatabaseService>(create: (_) => DatabaseService()),
+        ChangeNotifierProvider<AuthService>(create: (_) => AuthService()),
+        Provider<DatabaseService>(
+          create: (context) => DatabaseService(
+            user: context.read<AuthService>().user,
+          ),
+        ),
         ChangeNotifierProvider<Cart>(create: (_) => Cart()),
       ],
-      child: MaterialApp(
-        title: 'Snackstream',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => AuthScreen(),
-          '/home': (context) => HomeScreen(),
-          '/restaurants': (context) => RestaurantScreen(
-              restaurant: Restaurant(
-                  id: 'id',
-                  name: 'name',
-                  address: 'address',
-                  imageUrl: 'imageUrl')),
-          '/orders': (context) => OrderScreen(),
-          '/delivery': (context) => DeliveryScreen(),
-          '/cart': (context) => CartScreen(),
-          '/checkout': (context) => CheckoutScreen(),
-          '/order_confirmation': (context) => OrderConfirmationScreen(),
+      child: Consumer<AuthService>(
+        builder: (context, authService, _) {
+          return MaterialApp(
+            title: 'Snackstream',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+            ),
+            initialRoute: authService.user == null ? '/' : '/home',
+            routes: {
+              '/': (context) => AuthScreen(),
+              '/home': (context) => HomeScreen(),
+              '/restaurants': (context) => RestaurantScreen(
+                  restaurant: Restaurant(
+                      id: 'id',
+                      name: 'name',
+                      address: 'address',
+                      imageUrl: 'imageUrl')),
+              '/orders': (context) => OrderScreen(),
+              '/delivery': (context) => DeliveryScreen(),
+              '/cart': (context) => CartScreen(),
+              '/checkout': (context) => CheckoutScreen(),
+              '/order_confirmation': (context) => OrderConfirmationScreen(),
+              '/reviews': (context) => ReviewsScreen(),
+            },
+          );
         },
       ),
     );

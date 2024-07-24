@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/database_service.dart';
-import '../models/order.dart';
+import '../widgets/app_drawer.dart';
 
 class OrderScreen extends StatelessWidget {
   @override
@@ -12,6 +12,7 @@ class OrderScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Orders'),
       ),
+      drawer: AppDrawer(),
       body: StreamBuilder<List<Map<String, dynamic>>>(
         stream: databaseService.getOrders(),
         builder: (context, snapshot) {
@@ -25,11 +26,18 @@ class OrderScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: orders.length,
             itemBuilder: (context, index) {
-              final orderData = orders[index];
-              final order = Order.fromFirestore(orderData, orderData['id']);
-              return ListTile(
-                title: Text(order.id),
-                subtitle: Text(order.status),
+              final order = orders[index];
+              return ExpansionTile(
+                title: Text('Order ID: ${order['id']}'),
+                subtitle: Text('Total: \$${order['total']}'),
+                children: [
+                  ...order['items'].map<Widget>((item) {
+                    return ListTile(
+                      title: Text(item['name']),
+                      subtitle: Text('Price: \$${item['price']}'),
+                    );
+                  }).toList(),
+                ],
               );
             },
           );

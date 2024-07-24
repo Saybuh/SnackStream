@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/cart.dart';
 import 'checkout_screen.dart';
+import '../widgets/app_drawer.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -12,6 +13,7 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Your Cart'),
       ),
+      drawer: AppDrawer(),
       body: Column(
         children: [
           Expanded(

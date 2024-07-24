@@ -25,6 +25,7 @@ class MenuItem {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'description': description,
       'price': price,

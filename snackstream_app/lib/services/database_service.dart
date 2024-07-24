@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final User? user;
+
+  DatabaseService({this.user});
 
   // Add a restaurant with menu items
   Future<void> addRestaurantWithMenuItems(Map<String, dynamic> data) async {
@@ -31,15 +35,30 @@ class DatabaseService {
 
   // Add an order
   Future<void> addOrder(Map<String, dynamic> data) async {
-    await _db.collection('orders').add(data);
+    final orderRef = await _db.collection('orders').add({
+      ...data,
+      'userId': user?.uid,
+      'total': data['items'].fold(0, (sum, item) => sum + item['price']),
+    });
+
+    // Update the order with the document ID
+    await orderRef.update({
+      'id': orderRef.id,
+    });
   }
 
   // Fetch orders
   Stream<List<Map<String, dynamic>>> getOrders() {
     return _db
         .collection('orders')
+        .where('userId', isEqualTo: user?.uid)
         .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
+        .map((snapshot) => snapshot.docs
+            .map((doc) => {
+                  ...doc.data(),
+                  'id': doc.id,
+                })
+            .toList());
   }
 
   // Fetch menu items for a restaurant
