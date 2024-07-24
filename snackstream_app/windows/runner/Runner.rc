@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "fooddeliveryapp" "\0"
+            VALUE "FileDescription", "snackstream_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fooddeliveryapp" "\0"
+            VALUE "InternalName", "snackstream_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "fooddeliveryapp.exe" "\0"
-            VALUE "ProductName", "fooddeliveryapp" "\0"
+            VALUE "OriginalFilename", "snackstream_app.exe" "\0"
+            VALUE "ProductName", "snackstream_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -1,24 +1,33 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Order {
-  String id;
-  String status;
-  String driverId;
-  Timestamp timestamp;
+  final String id;
+  final String restaurantId;
+  final String userId;
+  final List<Map<String, dynamic>> items;
+  final String status;
 
   Order(
       {required this.id,
-      required this.status,
-      required this.driverId,
-      required this.timestamp});
+      required this.restaurantId,
+      required this.userId,
+      required this.items,
+      required this.status});
 
-  factory Order.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data() as Map;
+  factory Order.fromFirestore(Map<String, dynamic> data, String id) {
     return Order(
-      id: doc.id,
-      status: data['status'] ?? '',
-      driverId: data['driverId'] ?? '',
-      timestamp: data['timestamp'] ?? Timestamp.now(),
+      id: id,
+      restaurantId: data['restaurantId'],
+      userId: data['userId'],
+      items: List<Map<String, dynamic>>.from(data['items']),
+      status: data['status'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'restaurantId': restaurantId,
+      'userId': userId,
+      'items': items,
+      'status': status,
+    };
   }
 }
