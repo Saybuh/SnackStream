@@ -3,8 +3,9 @@ import '../models/menu_item.dart';
 
 class MenuItemTile extends StatelessWidget {
   final MenuItem menuItem;
+  final VoidCallback onAddToCart;
 
-  MenuItemTile({required this.menuItem});
+  MenuItemTile({required this.menuItem, required this.onAddToCart});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class MenuItemTile extends StatelessWidget {
       title: Text(menuItem.name),
       subtitle: Text(menuItem.description),
       trailing: Text('\$${menuItem.price.toStringAsFixed(2)}'),
+      onTap: onAddToCart,
     );
   }
 }
