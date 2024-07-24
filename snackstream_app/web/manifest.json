@@ -1,6 +1,6 @@
 {
-    "name": "snackstream_app",
-    "short_name": "snackstream_app",
+    "name": "fooddeliveryapp",
+    "short_name": "fooddeliveryapp",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
