@@ -97,4 +97,13 @@ class DatabaseService {
                 })
             .toList());
   }
+
+  // Fetch a single order by ID
+  Future<Map<String, dynamic>> getOrderById(String orderId) async {
+    final doc = await _db.collection('orders').doc(orderId).get();
+    return {
+      ...doc.data()!,
+      'id': doc.id,
+    };
+  }
 }

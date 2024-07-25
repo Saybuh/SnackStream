@@ -4,7 +4,7 @@ import '../services/auth_service.dart';
 import '../screens/home_screen.dart';
 import '../screens/cart_screen.dart';
 import '../screens/order_screen.dart';
-import '../screens/reviews_screen.dart';
+import '../screens/customer_reviews_screen.dart';
 import '../screens/auth_screen.dart';
 import '../screens/driver_home_screen.dart';
 
@@ -19,7 +19,7 @@ class AppDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text('Menu'),
+            child: Text('SnackStream'),
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
@@ -61,7 +61,8 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => ReviewsScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => CustomerReviewsScreen()),
                 );
               },
             ),

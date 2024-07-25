@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:snackstream_app/models/restaurant.dart';
+import 'package:snackstream_app/screens/add_review_screen.dart';
 import 'screens/auth_screen.dart';
 import 'services/auth_service.dart';
 import 'services/database_service.dart';
@@ -12,9 +13,10 @@ import 'screens/home_screen.dart';
 import 'screens/cart_screen.dart';
 import 'screens/checkout_screen.dart';
 import 'screens/order_confirmation_screen.dart';
-import 'screens/reviews_screen.dart';
+import 'screens/customer_reviews_screen.dart';
 import 'screens/driver_home_screen.dart';
 import 'models/cart.dart';
+import 'screens/order_tracking_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,12 +99,32 @@ class SnackstreamApp extends StatelessWidget {
                   authService.userRole == 'customer'
                       ? OrderConfirmationScreen()
                       : AuthScreen(),
-              '/reviews': (context) => authService.userRole == 'customer'
-                  ? ReviewsScreen()
-                  : AuthScreen(),
+              '/customer_reviews': (context) =>
+                  authService.userRole == 'customer'
+                      ? CustomerReviewsScreen()
+                      : AuthScreen(),
               '/driver_home': (context) => authService.userRole == 'driver'
                   ? DriverHomeScreen()
                   : AuthScreen(),
+              '/order_tracking': (context) => authService.userRole == 'customer'
+                  ? OrderTrackingScreen(
+                      customerAddress: 'Your customer address',
+                      restaurantAddress: 'Your restaurant address',
+                    )
+                  : AuthScreen(),
+              '/order': (context) => OrderScreen(),
+            },
+            onGenerateRoute: (settings) {
+              if (settings.name == '/add_review') {
+                final args = settings.arguments as Map<String, String>;
+                return MaterialPageRoute(
+                  builder: (context) {
+                    return AddReviewScreen(id: args['orderId']!);
+                  },
+                );
+              }
+              assert(false, 'Need to implement ${settings.name}');
+              return null;
             },
           );
         },
