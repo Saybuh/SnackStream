@@ -18,7 +18,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String cardHolderName = '';
   String cvvCode = '';
   bool isCvvFocused = false;
-
+  final TextEditingController _addressController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   void onCreditCardModelChange(CreditCardModel creditCardModel) {
@@ -69,6 +69,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     obscureCvv: true,
                     obscureNumber: true,
                   ),
+                  TextField(
+                    controller: _addressController,
+                    decoration: InputDecoration(labelText: 'Delivery Address'),
+                  ),
                   ElevatedButton(
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
@@ -78,6 +82,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           'items':
                               cart.items.map((item) => item.toMap()).toList(),
                           'status': 'pending',
+                          'customerAddress': _addressController.text,
+                          'restaurantAddress':
+                              'Restaurant Address Here', // Fetch the restaurant address
                         });
                         cart.clear();
                         Navigator.pushReplacement(

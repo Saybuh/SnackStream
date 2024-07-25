@@ -13,6 +13,7 @@ import 'screens/cart_screen.dart';
 import 'screens/checkout_screen.dart';
 import 'screens/order_confirmation_screen.dart';
 import 'screens/reviews_screen.dart';
+import 'screens/driver_home_screen.dart';
 import 'models/cart.dart';
 
 void main() async {
@@ -36,27 +37,72 @@ class SnackstreamApp extends StatelessWidget {
       ],
       child: Consumer<AuthService>(
         builder: (context, authService, _) {
+          if (authService.isLoading) {
+            return MaterialApp(
+              title: 'Snackstream',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              ),
+            );
+          }
+
+          if (authService.user == null) {
+            return MaterialApp(
+              title: 'Snackstream',
+              theme: ThemeData(
+                primarySwatch: Colors.blue,
+              ),
+              home: AuthScreen(),
+            );
+          }
+
           return MaterialApp(
             title: 'Snackstream',
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
-            initialRoute: authService.user == null ? '/' : '/home',
+            home: authService.userRole == 'driver'
+                ? DriverHomeScreen()
+                : HomeScreen(),
             routes: {
-              '/': (context) => AuthScreen(),
-              '/home': (context) => HomeScreen(),
-              '/restaurants': (context) => RestaurantScreen(
-                  restaurant: Restaurant(
-                      id: 'id',
-                      name: 'name',
-                      address: 'address',
-                      imageUrl: 'imageUrl')),
-              '/orders': (context) => OrderScreen(),
-              '/delivery': (context) => DeliveryScreen(),
-              '/cart': (context) => CartScreen(),
-              '/checkout': (context) => CheckoutScreen(),
-              '/order_confirmation': (context) => OrderConfirmationScreen(),
-              '/reviews': (context) => ReviewsScreen(),
+              '/home': (context) => authService.userRole == 'customer'
+                  ? HomeScreen()
+                  : AuthScreen(),
+              '/restaurants': (context) => authService.userRole == 'customer'
+                  ? RestaurantScreen(
+                      restaurant: Restaurant(
+                        id: 'id',
+                        name: 'name',
+                        address: 'address',
+                        imageUrl: 'imageUrl',
+                      ),
+                    )
+                  : AuthScreen(),
+              '/orders': (context) => authService.userRole == 'customer'
+                  ? OrderScreen()
+                  : AuthScreen(),
+              '/delivery': (context) => authService.userRole == 'customer'
+                  ? DeliveryScreen()
+                  : AuthScreen(),
+              '/cart': (context) => authService.userRole == 'customer'
+                  ? CartScreen()
+                  : AuthScreen(),
+              '/checkout': (context) => authService.userRole == 'customer'
+                  ? CheckoutScreen()
+                  : AuthScreen(),
+              '/order_confirmation': (context) =>
+                  authService.userRole == 'customer'
+                      ? OrderConfirmationScreen()
+                      : AuthScreen(),
+              '/reviews': (context) => authService.userRole == 'customer'
+                  ? ReviewsScreen()
+                  : AuthScreen(),
+              '/driver_home': (context) => authService.userRole == 'driver'
+                  ? DriverHomeScreen()
+                  : AuthScreen(),
             },
           );
         },

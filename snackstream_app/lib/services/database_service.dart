@@ -38,6 +38,7 @@ class DatabaseService {
     final orderRef = await _db.collection('orders').add({
       ...data,
       'userId': user?.uid,
+      'status': 'pending',
       'total': data['items'].fold(0, (sum, item) => sum + item['price']),
     });
 
@@ -47,7 +48,7 @@ class DatabaseService {
     });
   }
 
-  // Fetch orders
+  // Fetch user orders
   Stream<List<Map<String, dynamic>>> getOrders() {
     return _db
         .collection('orders')
@@ -59,6 +60,27 @@ class DatabaseService {
                   'id': doc.id,
                 })
             .toList());
+  }
+
+  // Fetch driver orders
+  Stream<List<Map<String, dynamic>>> getDriverOrders() {
+    return _db
+        .collection('orders')
+        .where('status', isEqualTo: 'pending')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => {
+                  ...doc.data(),
+                  'id': doc.id,
+                })
+            .toList());
+  }
+
+  // Update order status
+  Future<void> updateOrderStatus(String orderId, String status) async {
+    await _db.collection('orders').doc(orderId).update({
+      'status': status,
+    });
   }
 
   // Fetch menu items for a restaurant

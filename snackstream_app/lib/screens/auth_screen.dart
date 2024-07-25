@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../services/auth_service.dart';
 import 'home_screen.dart';
+import 'driver_home_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLogin = true;
+  String _role = 'customer';
 
   void _showToast(String message) {
     Fluttertoast.showToast(
@@ -34,10 +36,17 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       if (user != null) {
         _showToast('Login successful');
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+        if (authService.userRole == 'driver') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => DriverHomeScreen()),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        }
       } else {
         _showToast('Login failed');
       }
@@ -45,6 +54,7 @@ class _AuthScreenState extends State<AuthScreen> {
       final user = await authService.registerWithEmailAndPassword(
         _emailController.text,
         _passwordController.text,
+        _role,
       );
       if (user != null) {
         _showToast('Account created');
@@ -78,6 +88,31 @@ class _AuthScreenState extends State<AuthScreen> {
               obscureText: true,
             ),
             SizedBox(height: 20),
+            if (!_isLogin)
+              Row(
+                children: [
+                  Radio(
+                    value: 'customer',
+                    groupValue: _role,
+                    onChanged: (value) {
+                      setState(() {
+                        _role = value.toString();
+                      });
+                    },
+                  ),
+                  Text('Customer'),
+                  Radio(
+                    value: 'driver',
+                    groupValue: _role,
+                    onChanged: (value) {
+                      setState(() {
+                        _role = value.toString();
+                      });
+                    },
+                  ),
+                  Text('Driver'),
+                ],
+              ),
             ElevatedButton(
               onPressed: () => _handleAuth(authService),
               child: Text(_isLogin ? 'Login' : 'Register'),
