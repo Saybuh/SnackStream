@@ -109,7 +109,8 @@ class SnackstreamApp extends StatelessWidget {
               '/order_tracking': (context) => authService.userRole == 'customer'
                   ? OrderTrackingScreen(
                       customerAddress: 'Your customer address',
-                      restaurantAddress: 'Your restaurant address',
+                      orderId:
+                          'orderId', // Ensure this value is passed correctly
                     )
                   : AuthScreen(),
               '/order': (context) => OrderScreen(),

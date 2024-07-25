@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../utils/random_address.dart'; // Import RandomAddress
 
 class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -52,11 +53,24 @@ class AuthService with ChangeNotifier {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       _user = result.user;
+
+      if (role == 'driver') {
+        // Assign a random address in Atlanta for the driver
+        String driverAddress = RandomAddress.getRandomAddress();
+        await _firestore.collection('drivers').doc(_user!.uid).set({
+          'uid': _user!.uid,
+          'email': email,
+          'role': role,
+          'address': driverAddress,
+        });
+      }
+
       await _firestore.collection('users').doc(_user!.uid).set({
         'uid': _user!.uid,
         'email': email,
         'role': role,
       });
+
       _userRole = role;
       notifyListeners();
       return _user;

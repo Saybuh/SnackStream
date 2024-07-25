@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/database_service.dart';
 import '../widgets/app_drawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../services/auth_service.dart';
 
 class DriverHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final databaseService = Provider.of<DatabaseService>(context);
+    final authService = Provider.of<AuthService>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +42,9 @@ class DriverHomeScreen extends StatelessWidget {
                           ))
                       .toList(),
                   onChanged: (newStatus) {
-                    databaseService.updateOrderStatus(order['id'], newStatus!);
+                    final driverId = authService.user?.uid;
+                    databaseService.updateOrderStatus(order['id'], newStatus!,
+                        driverId: newStatus == 'accepted' ? driverId : null);
                   },
                 ),
               );

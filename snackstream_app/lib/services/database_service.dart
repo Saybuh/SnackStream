@@ -62,25 +62,28 @@ class DatabaseService {
             .toList());
   }
 
-  // Fetch driver orders
+  // Fetch driver orders (all orders)
   Stream<List<Map<String, dynamic>>> getDriverOrders() {
-    return _db
-        .collection('orders')
-        .where('status', isEqualTo: 'pending')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => {
-                  ...doc.data(),
-                  'id': doc.id,
-                })
-            .toList());
+    return _db.collection('orders').snapshots().map((snapshot) => snapshot.docs
+        .map((doc) => {
+              ...doc.data(),
+              'id': doc.id,
+            })
+        .toList());
   }
 
   // Update order status
-  Future<void> updateOrderStatus(String orderId, String status) async {
-    await _db.collection('orders').doc(orderId).update({
+  Future<void> updateOrderStatus(String orderId, String status,
+      {String? driverId}) async {
+    final updateData = {
       'status': status,
-    });
+    };
+
+    if (status == 'accepted' && driverId != null) {
+      updateData['driverId'] = driverId;
+    }
+
+    await _db.collection('orders').doc(orderId).update(updateData);
   }
 
   // Fetch menu items for a restaurant
