@@ -15,8 +15,9 @@ import 'screens/checkout_screen.dart';
 import 'screens/order_confirmation_screen.dart';
 import 'screens/customer_reviews_screen.dart';
 import 'screens/driver_home_screen.dart';
-import 'models/cart.dart';
 import 'screens/order_tracking_screen.dart';
+import 'screens/order_tracking_map_screen.dart';
+import 'models/cart.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,13 +108,16 @@ class SnackstreamApp extends StatelessWidget {
                   ? DriverHomeScreen()
                   : AuthScreen(),
               '/order_tracking': (context) => authService.userRole == 'customer'
-                  ? OrderTrackingScreen(
-                      customerAddress: 'Your customer address',
-                      orderId:
-                          'orderId', // Ensure this value is passed correctly
+                  ? OrderTrackingScreen()
+                  : AuthScreen(),
+              '/order_tracking_map': (context) => authService.userRole == 'customer'
+                  ? OrderTrackingMapScreen(
+                      orderId: (ModalRoute.of(context)?.settings.arguments
+                          as Map<String, dynamic>)['orderId'],
+                      customerAddress: (ModalRoute.of(context)?.settings.arguments
+                          as Map<String, dynamic>)['customerAddress'],
                     )
                   : AuthScreen(),
-              '/order': (context) => OrderScreen(),
             },
             onGenerateRoute: (settings) {
               if (settings.name == '/add_review') {

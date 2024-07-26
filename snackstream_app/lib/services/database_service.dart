@@ -109,4 +109,19 @@ class DatabaseService {
       'id': doc.id,
     };
   }
+
+  // Fetch orders with status 'accepted'
+Stream<List<Map<String, dynamic>>> getAcceptedOrders() {
+  return _db
+      .collection('orders')
+      .where('status', isEqualTo: 'accepted')
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map((doc) => {
+                ...doc.data(),
+                'id': doc.id,
+              })
+          .toList());
+}
+
 }

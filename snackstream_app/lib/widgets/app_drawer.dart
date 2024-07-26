@@ -7,7 +7,7 @@ import '../screens/order_screen.dart';
 import '../screens/customer_reviews_screen.dart';
 import '../screens/auth_screen.dart';
 import '../screens/driver_home_screen.dart';
-import '../screens/order_tracking_screen.dart'; // Import the OrderTrackingScreen
+import '../screens/order_tracking_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -68,17 +68,13 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.location_on),
+              leading: Icon(Icons.directions),
               title: Text('Order Tracking'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderTrackingScreen(
-                      customerAddress: 'Your customer address',
-                      orderId: 'Your order ID', // Pass the correct order ID
-                    ),
-                  ),
+                      builder: (context) => OrderTrackingScreen()),
                 );
               },
             ),
