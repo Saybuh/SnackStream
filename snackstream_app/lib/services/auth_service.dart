@@ -32,8 +32,7 @@ class AuthService with ChangeNotifier {
     return doc.exists ? doc['role'] as String? : null;
   }
 
-  Future<User?> signInWithEmailAndPassword(
-      String email, String password) async {
+  Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -47,8 +46,7 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<User?> registerWithEmailAndPassword(
-      String email, String password, String role) async {
+  Future<User?> registerWithEmailAndPassword(String email, String password, String role) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
